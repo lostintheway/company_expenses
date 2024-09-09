@@ -6,6 +6,18 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 
+export const userTable = sqliteTable("user", {
+  id: text("id").primaryKey(),
+});
+
+export const sessionTable = sqliteTable("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  expiresAt: integer("expires_at").notNull(),
+});
+
 export const users = sqliteTable("users", {
   userId: integer("user_id").primaryKey({ autoIncrement: true }),
   username: text("username").notNull().unique(),
