@@ -7,7 +7,6 @@ const publicRoutes = ["/login", "/register", "/signup", "/404"];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  console.log("at middleware", pathname);
 
   // Allow access to public routes without authentication
   if (publicRoutes.includes(pathname)) {
@@ -16,8 +15,6 @@ export async function middleware(request: NextRequest) {
 
   // Use the validateRequest function to check the session
   const { user } = await validateRequest();
-
-  console.log("user", user);
 
   // Redirect to login if there's no valid session
   if (!user) {

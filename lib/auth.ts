@@ -46,7 +46,6 @@ export const validateRequest = cache(
     { user: User; session: Session } | { user: null; session: null }
   > => {
     const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-    console.log({ sessionId });
 
     if (!sessionId) {
       return {
@@ -56,7 +55,6 @@ export const validateRequest = cache(
     }
 
     const result = await lucia.validateSession(sessionId);
-    console.log({ result });
     // next.js throws when you attempt to set cookie when rendering page
     try {
       if (result.session && result.session.fresh) {

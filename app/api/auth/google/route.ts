@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { lucia } from "@/lib/auth";
 import { db } from "@/db";
 import { userTable, oauthAccount } from "@/db/schema";
+import { COOKIE_EXPIRATION } from "@/constants/constants";
 
 type GoogleUser = {
   id: string;
@@ -27,8 +28,6 @@ export const GET = async (req: NextRequest) => {
 
   const codeVerifier = cookies().get("codeVerifier")?.value;
   const savedState = cookies().get("state")?.value;
-
-  console.log({ codeVerifier, savedState });
 
   if (!codeVerifier || !savedState) {
     return new Response("No code verifier or state found", { status: 400 });
@@ -98,7 +97,8 @@ export const GET = async (req: NextRequest) => {
         await tx
           .update(oauthAccount)
           .set({
-            expiresAt: accessTokenExpiresAt,
+            //add 10 days from today in Date format
+            expiresAt: new Date(Date.now() + COOKIE_EXPIRATION),
             providerUserId: googleData.id,
             accessToken: accessToken,
             refreshToken: refreshToken,
@@ -110,35 +110,15 @@ export const GET = async (req: NextRequest) => {
     });
 
     const userIdFinal = result.id.toString();
-    console.log({ userIdFinal });
 
-    const session = await lucia.createSession(userIdFinal, {
-      expiresAt: 60 * 60 * 24 * 10,
-    });
+    const session = await lucia.createSession(userIdFinal, {});
 
     const sessionCookie = lucia.createSessionCookie(session.id);
 
-    console.log({
-      value: sessionCookie.value,
-      name: sessionCookie.name,
-      attributes: sessionCookie.attributes,
+    cookies().set(sessionCookie.name, sessionCookie.value, {
+      ...sessionCookie.attributes,
+      expires: COOKIE_EXPIRATION,
     });
-
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
-    // const state = generateState();
-    // cookies().set("google_oauth_state", state, {
-    //   path: "/",
-    //   secure: process.env.NODE_ENV === "production",
-    //   httpOnly: true,
-    //   maxAge: 60 * 60 * 24 * 10, // is 5 days
-    //   sameSite: "lax",
-    // });
-
-    // console.log({ state });
 
     return NextResponse.redirect(url.origin);
   } catch (error) {
