@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
+    serverActions: { allowedOrigins: ["http://localhost:3000"] },
   },
 };
 
