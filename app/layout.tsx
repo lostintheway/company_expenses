@@ -17,14 +17,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Toaster />
-        {/* <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        > */}
-        {children}
-        {/* </ThemeProvider> */}
+        <ThemeProvider
+          // attribute="class"
+          defaultTheme="light"
+          // enableSystem
+          // disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
