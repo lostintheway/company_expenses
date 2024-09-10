@@ -109,17 +109,36 @@ export const GET = async (req: NextRequest) => {
       return currentUser;
     });
 
-    const session = await lucia.createSession(result.id.toString(), {
-      expiresAt: 60 * 60 * 24 * 2, // this is 30 days
+    const userIdFinal = result.id.toString();
+    console.log({ userIdFinal });
+
+    const session = await lucia.createSession(userIdFinal, {
+      expiresAt: 60 * 60 * 24 * 10,
     });
 
     const sessionCookie = lucia.createSessionCookie(session.id);
+
+    console.log({
+      value: sessionCookie.value,
+      name: sessionCookie.name,
+      attributes: sessionCookie.attributes,
+    });
 
     cookies().set(
       sessionCookie.name,
       sessionCookie.value,
       sessionCookie.attributes
     );
+    // const state = generateState();
+    // cookies().set("google_oauth_state", state, {
+    //   path: "/",
+    //   secure: process.env.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   maxAge: 60 * 60 * 24 * 10, // is 5 days
+    //   sameSite: "lax",
+    // });
+
+    // console.log({ state });
 
     return NextResponse.redirect(url.origin);
   } catch (error) {

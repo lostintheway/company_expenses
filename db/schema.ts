@@ -9,7 +9,7 @@ import {
 
 export const userTable = sqliteTable("users", {
   id: text("id").primaryKey(),
-  googleId: text("google_id"),
+  googleId: text("google_id").unique(),
   passwordHash: text("password_hash"),
   username: text("username").unique(),
 

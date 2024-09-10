@@ -8,6 +8,14 @@ export const createAuthUrl = async () => {
     const state = generateState();
     const codeVerifier = generateCodeVerifier();
 
+    cookies().set("google_oauth_state", state, {
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 5, // is 5 days
+      sameSite: "lax",
+    });
+
     cookies().set(
       "codeVerifier",
       codeVerifier,

@@ -9,7 +9,6 @@ const publicRoutes = ["/login", "/register", "/signup", "/404"];
 
 export async function middleware(request: NextRequest) {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-  console.log({ sessionId });
 
   if (!sessionId) return null;
   const { user, session } = await lucia.validateSession(sessionId);
