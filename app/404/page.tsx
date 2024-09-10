@@ -1,6 +1,4 @@
-"use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { Home, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function NotFoundPage() {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 dark:from-purple-900 dark:via-pink-900 dark:to-blue-900 animate-gradient-x">
       <Card className="w-full max-w-3xl overflow-hidden shadow-xl mx-4 dark:bg-gray-800">
@@ -44,22 +41,24 @@ export default function NotFoundPage() {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-center bg-gray-100 dark:bg-gray-700 p-4 space-y-2 sm:space-y-0">
-          <Button
-            variant="outline"
-            onClick={() => router.push("/")}
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors duration-300"
-          >
-            <Home className="h-5 w-5" />
-            <span>Go Home</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => router.push("/login")}
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 hover:bg-pink-100 dark:hover:bg-pink-800 transition-colors duration-300"
-          >
-            <LogIn className="h-5 w-5" />
-            <span>Login</span>
-          </Button>
+          <Link href="/">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors duration-300"
+            >
+              <Home className="h-5 w-5" />
+              <span>Go Home</span>
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 hover:bg-pink-100 dark:hover:bg-pink-800 transition-colors duration-300"
+            >
+              <LogIn className="h-5 w-5" />
+              <span>Login</span>
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>
