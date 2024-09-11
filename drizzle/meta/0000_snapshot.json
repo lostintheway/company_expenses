@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ec07af3f-172e-4da7-94e9-be4f3d4f2fa7",
+  "id": "ba71d6ec-ec0b-4e25-b973-36a07dc1dcc5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -32,7 +32,7 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": "current_timestamp"
         },
@@ -40,7 +40,7 @@
           "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": "current_timestamp"
         }
@@ -113,21 +113,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "images_entry_id_ledger_entries_entry_id_fk": {
-          "name": "images_entry_id_ledger_entries_entry_id_fk",
-          "tableFrom": "images",
-          "tableTo": "ledger_entries",
-          "columnsFrom": [
-            "entry_id"
-          ],
-          "columnsTo": [
-            "entry_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -180,7 +166,7 @@
           "name": "category_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "image_url": {
@@ -208,34 +194,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "ledger_entries_user_id_users_id_fk": {
-          "name": "ledger_entries_user_id_users_id_fk",
-          "tableFrom": "ledger_entries",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "ledger_entries_category_id_categories_category_id_fk": {
-          "name": "ledger_entries_category_id_categories_category_id_fk",
-          "tableFrom": "ledger_entries",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "category_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -258,34 +217,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "ledger_entry_tags_entry_id_ledger_entries_entry_id_fk": {
-          "name": "ledger_entry_tags_entry_id_ledger_entries_entry_id_fk",
-          "tableFrom": "ledger_entry_tags",
-          "tableTo": "ledger_entries",
-          "columnsFrom": [
-            "entry_id"
-          ],
-          "columnsTo": [
-            "entry_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "ledger_entry_tags_tag_id_tags_tag_id_fk": {
-          "name": "ledger_entry_tags_tag_id_tags_tag_id_fk",
-          "tableFrom": "ledger_entry_tags",
-          "tableTo": "tags",
-          "columnsFrom": [
-            "tag_id"
-          ],
-          "columnsTo": [
-            "tag_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
         "ledger_entry_tags_entry_id_tag_id_pk": {
           "columns": [
@@ -351,21 +283,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "oauth_account_user_id_users_id_fk": {
-          "name": "oauth_account_user_id_users_id_fk",
-          "tableFrom": "oauth_account",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -395,21 +313,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "session_user_id_users_id_fk": {
-          "name": "session_user_id_users_id_fk",
-          "tableFrom": "session",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -503,7 +407,8 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "current_timestamp"
         },
         "updated_at": {
           "name": "updated_at",
@@ -515,6 +420,13 @@
         }
       },
       "indexes": {
+        "users_google_id_unique": {
+          "name": "users_google_id_unique",
+          "columns": [
+            "google_id"
+          ],
+          "isUnique": true
+        },
         "users_username_unique": {
           "name": "users_username_unique",
           "columns": [

@@ -6,7 +6,7 @@ dotenv.config({
 });
 
 export default {
-  schema: "./app/db/schema.ts",
+  schema: "./db/schema.ts",
   out: "./drizzle",
   dialect: "sqlite",
   driver: "turso",

@@ -17,7 +17,9 @@ export const userTable = sqliteTable("users", {
   isEmailVerified: integer("is_email_verified", { mode: "boolean" })
     .notNull()
     .default(false),
-  createdAt: integer("created_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(
+    sql`current_timestamp`
+  ),
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(
     sql`current_timestamp`
   ),
@@ -27,9 +29,7 @@ export const oauthAccount = sqliteTable("oauth_account", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   provider: text("provider").notNull(),
   providerUserId: text("provider_user_id").notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
+  userId: text("user_id").notNull(),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
@@ -37,9 +37,7 @@ export const oauthAccount = sqliteTable("oauth_account", {
 
 export const sessionTable = sqliteTable("session", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
+  userId: text("user_id").notNull(),
   expiresAt: integer("expires_at").notNull(),
 });
 
@@ -60,24 +58,22 @@ export const categories = sqliteTable("categories", {
   categoryId: integer("category_id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
   description: text("description"),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(
+    sql`current_timestamp`
+  ),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
+    sql`current_timestamp`
+  ),
 });
 
 export const ledgerEntries = sqliteTable("ledger_entries", {
   entryId: integer("entry_id").primaryKey({ autoIncrement: true }),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
+  userId: text("user_id").notNull(),
   description: text("description").notNull(),
   amount: blob("amount", { mode: "bigint" }).notNull(), // Using blob for DECIMAL
   entryDate: integer("entry_date", { mode: "timestamp" }).notNull(),
   entryType: text("entry_type", { enum: ["income", "expense"] }).notNull(),
-  categoryId: integer("category_id").references(() => categories.categoryId),
+  categoryId: integer("category_id").notNull(),
   imageUrl: text("image_url"),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -89,9 +85,7 @@ export const ledgerEntries = sqliteTable("ledger_entries", {
 
 export const images = sqliteTable("images", {
   imageId: integer("image_id").primaryKey({ autoIncrement: true }),
-  entryId: integer("entry_id")
-    .notNull()
-    .references(() => ledgerEntries.entryId, { onDelete: "cascade" }),
+  entryId: integer("entry_id").notNull(),
   fileName: text("file_name").notNull(),
   filePath: text("file_path").notNull(),
   fileSize: integer("file_size").notNull(),
@@ -112,12 +106,8 @@ export const tags = sqliteTable("tags", {
 export const ledgerEntryTags = sqliteTable(
   "ledger_entry_tags",
   {
-    entryId: integer("entry_id")
-      .notNull()
-      .references(() => ledgerEntries.entryId, { onDelete: "cascade" }),
-    tagId: integer("tag_id")
-      .notNull()
-      .references(() => tags.tagId, { onDelete: "cascade" }),
+    entryId: integer("entry_id").notNull(),
+    tagId: integer("tag_id").notNull(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.entryId, table.tagId] }),
