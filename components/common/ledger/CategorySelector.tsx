@@ -17,7 +17,7 @@ export default function CategorySelector({
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCategoryId = e.target.value;
-    const mainUrl = pathname.substring(0, 22);
+    const mainUrl = pathname.substring(0, 20);
     const newPathname = mainUrl + "/" + newCategoryId;
     router.push(`${newPathname}`);
   };
@@ -26,7 +26,7 @@ export default function CategorySelector({
     <select
       value={currentCategoryId}
       onChange={handleChange}
-      className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      className="block w-auto mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
     >
       <option value="">All Categories</option>
       {categories.map((category) => (

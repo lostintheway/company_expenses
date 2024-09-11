@@ -12,8 +12,8 @@ export default function SortSelector({
   const pathname = usePathname();
 
   const handleSortChange = (newSort: "latest" | "oldest") => {
-    const mainUrl = pathname.substring(0, 16);
-    const remaining = pathname.substring(22);
+    const mainUrl = pathname.substring(0, 14);
+    const remaining = pathname.substring(20);
     const newPathname = mainUrl + newSort + remaining;
     router.push(newPathname);
   };
