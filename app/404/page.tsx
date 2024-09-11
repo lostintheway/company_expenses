@@ -19,7 +19,7 @@ export default function NotFoundPage() {
           <CardTitle className="text-3xl md:text-4xl font-bold mb-2 animate-bounce">
             404: Page Not Found
           </CardTitle>
-          <CardDescription className="text-base md:text-lg">
+          <CardDescription className="text-base md:text-lg text-white">
             Oops! It seems you&apos;ve ventured into uncharted territory.
           </CardDescription>
         </CardHeader>

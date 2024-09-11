@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
-  content: ["./app/**/*.{ts,tsx,mdx}"],
+  content: ["./**/*.{ts,tsx,mdx}"],
   theme: {
     extend: {
       borderRadius: {

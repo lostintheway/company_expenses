@@ -1,5 +1,29 @@
+import LogOut from "@/components/common/logout";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  Mail,
+  Menu,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+} from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -13,6 +37,29 @@ export default function Navbar() {
           <Menu className="h-6 w-6" />
         </Button>
         <h1 className="text-xl font-bold">Dashboard</h1>
+      </div>
+      <div className="relative">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="overflow-hidden rounded-full justify-center flex bg-gray-300"
+            >
+              <User className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {/* <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>Support</DropdownMenuItem> */}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <LogOut />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );
