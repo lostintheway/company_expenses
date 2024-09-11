@@ -32,18 +32,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { toast } from "sonner";
-
-type Category = {
-  categoryId: number;
-  name: string;
-  description: string | null;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-};
+import { categoriesSelect } from "@/db/schema";
 
 type CategoriesClientProps = {
-  initialCategories: Category[];
+  initialCategories: categoriesSelect[];
 };
 
 const formSchema = z.object({
@@ -127,7 +119,7 @@ export default function CategoriesClient({
     }
   };
 
-  const openEditModal = (category: Category) => {
+  const openEditModal = (category: categoriesSelect) => {
     form.reset({
       categoryId: category.categoryId,
       name: category.name,

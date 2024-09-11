@@ -20,7 +20,7 @@ CREATE TABLE `ledger_entries` (
 	`entry_id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` text NOT NULL,
 	`description` text NOT NULL,
-	`amount` blob NOT NULL,
+	`amount` integer NOT NULL,
 	`entry_date` integer NOT NULL,
 	`entry_type` text NOT NULL,
 	`category_id` integer NOT NULL,

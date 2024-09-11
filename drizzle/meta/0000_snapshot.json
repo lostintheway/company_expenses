@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ba71d6ec-ec0b-4e25-b973-36a07dc1dcc5",
+  "id": "68af1548-cb37-47c8-a502-0707936045ed",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -143,7 +143,7 @@
         },
         "amount": {
           "name": "amount",
-          "type": "blob",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

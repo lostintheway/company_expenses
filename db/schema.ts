@@ -41,19 +41,6 @@ export const sessionTable = sqliteTable("session", {
   expiresAt: integer("expires_at").notNull(),
 });
 
-// export const users = sqliteTable("users", {
-//   userId: text("user_id").primaryKey({ autoIncrement: true }),
-//   username: text("username").notNull().unique(),
-//   email: text("email").notNull().unique(),
-//   passwordHash: text("password_hash").notNull(),
-//   createdAt: integer("created_at", { mode: "timestamp" })
-//     .notNull()
-//     .default(sql`current_timestamp`),
-//   updatedAt: integer("updated_at", { mode: "timestamp" })
-//     .notNull()
-//     .default(sql`current_timestamp`),
-// });
-
 export const categories = sqliteTable("categories", {
   categoryId: integer("category_id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
@@ -70,7 +57,7 @@ export const ledgerEntries = sqliteTable("ledger_entries", {
   entryId: integer("entry_id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull(),
   description: text("description").notNull(),
-  amount: blob("amount", { mode: "bigint" }).notNull(), // Using blob for DECIMAL
+  amount: integer("amount").notNull(), // Using blob for DECIMAL
   entryDate: integer("entry_date", { mode: "timestamp" }).notNull(),
   entryType: text("entry_type", { enum: ["income", "expense"] }).notNull(),
   categoryId: integer("category_id").notNull(),
