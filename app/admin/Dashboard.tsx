@@ -1,7 +1,5 @@
 "use server";
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import Aside from "./Aside";
 import Navbar from "./Navbar";
 

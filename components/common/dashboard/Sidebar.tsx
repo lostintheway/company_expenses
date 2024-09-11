@@ -1,20 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useSidebar } from "./SidebarContext";
 
 export function Sidebar() {
-  const { isOpen } = useSidebar();
-
   return (
     <aside
       className={`
       bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-50 p-4
       transition-all duration-300 ease-in-out
-      ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-0"}
       fixed md:static md:translate-x-0 h-full z-10
-    `}
+      `}
     >
+      {/* ${ "translate-x-0 w-64" : "-translate-x-full w-0"} */}
       <nav>
         <ul className="space-y-2">
           <li>
@@ -22,7 +19,7 @@ export function Sidebar() {
               href="/dashboard"
               className="block py-2 px-4 hover:bg-purple-100 dark:hover:bg-purple-900"
             >
-              Home {JSON.stringify(isOpen)}
+              Home
             </Link>
           </li>
           <li>

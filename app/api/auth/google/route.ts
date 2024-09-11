@@ -120,7 +120,7 @@ export const GET = async (req: NextRequest) => {
       expires: COOKIE_EXPIRATION,
     });
 
-    return NextResponse.redirect(url.origin);
+    return NextResponse.redirect(url.origin + "/admin");
   } catch (error) {
     console.error("OAuth error:", error);
     return new Response("Authentication failed", { status: 500 });
