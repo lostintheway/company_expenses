@@ -22,7 +22,7 @@ export async function getLedgerEntries({
   unstable_noStore();
 
   try {
-    let query = db.select().from(ledgerEntries);
+    let query: any = db.select().from(ledgerEntries);
 
     const conditions = [];
 
@@ -30,20 +30,20 @@ export async function getLedgerEntries({
       conditions.push(eq(ledgerEntries.categoryId, categoryId));
     }
 
-    if (startDate) {
-      conditions.push(
-        gte(
-          sql`(${ledgerEntries.entryDate})`,
-          sql`strftime('%s', ${startDate.substring(0, 10)})`
-        )
-      );
-    }
+    if (startDate && endDate) {
+      const startOfDay = `${startDate.substring(0, 10)}T00:00:00.000Z`;
+      const endOfDay = `${endDate.substring(0, 10)}T23:59:59.999Z`;
 
-    if (endDate) {
       conditions.push(
-        lte(
-          sql`(${ledgerEntries.entryDate})`,
-          sql`strftime('%s', ${endDate.substring(0, 10)})`
+        and(
+          gte(
+            sql`(${ledgerEntries.entryDate})`,
+            sql`strftime('%s', ${startOfDay}) * 1000`
+          ),
+          lte(
+            sql`(${ledgerEntries.entryDate})`,
+            sql`strftime('%s', ${endOfDay}) * 1000`
+          )
         )
       );
     }
@@ -53,10 +53,10 @@ export async function getLedgerEntries({
 
     query = query.orderBy(
       sort === "latest"
-        ? desc(ledgerEntries.entryDate)
-        : asc(ledgerEntries.entryDate)
+        ? desc(ledgerEntries.entryId)
+        : asc(ledgerEntries.entryId)
     );
-    // query.toSQL()
+    console.log(query.toSQL());
     const results = await query;
 
     return results;

@@ -9,20 +9,28 @@ import {
 } from "@/components/ui/dialog";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { categoriesSelect, ledgerEntriesSelect } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Select } from "@radix-ui/react-select";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Plus } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Calendar } from "@/components/ui/calendar";
 
 export default function AddEditLedger({
   categories,
@@ -67,11 +75,14 @@ export default function AddEditLedger({
       const response = await fetch(url, {
         method: method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          entryDate: values.entryDate,
+        }),
       });
 
       if (response.ok) {
-        revalidatePath("/admin/ledger/[...slug]");
+        revalidatePath("/admin/ledger/[...slug]", "page");
         setAlertMessage(
           isEditing ? "Entry updated successfully" : "Entry added successfully"
         );
@@ -86,7 +97,7 @@ export default function AddEditLedger({
   };
 
   return (
-    <div className="absolute top-1 right-0">
+    <div className="">
       <Dialog
         open={isAddDialogOpen}
         onOpenChange={(open) => setIsAddDialogOpen(open)}
@@ -99,7 +110,7 @@ export default function AddEditLedger({
               form.reset();
             }}
           >
-            + Add Entry
+            <Plus className="mr-2 h-4 w-4" /> Add Entry
           </Button>
         </DialogTrigger>
         <DialogContent aria-describedby="category-form-description">
@@ -116,7 +127,10 @@ export default function AddEditLedger({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
-                    <Input {...field} />
+                    <Input
+                      className="bg-white bg-opacity-60 shadow"
+                      {...field}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -128,6 +142,7 @@ export default function AddEditLedger({
                   <FormItem>
                     <FormLabel>Amount</FormLabel>
                     <Input
+                      className="bg-white bg-opacity-60 shadow"
                       type="number"
                       {...field}
                       onChange={(e) =>
@@ -142,31 +157,66 @@ export default function AddEditLedger({
                 control={form.control}
                 name="entryDate"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>Date</FormLabel>
-                    <Input
-                      type="date"
-                      {...field}
-                      onChange={(e) => field.onChange(new Date(e.target.value))}
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "bg-white bg-opacity-60 w-[240px] pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              field.value.toLocaleDateString("en-UK", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              })
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="entryType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                    <FormLabel className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                      Type
+                    </FormLabel>
+                    <select
+                      {...field}
+                      className={`bg-white bg-opacity-70 py-1 px-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 
+                        focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 
+                        dark:border-gray-600 dark:text-white`}
                     >
                       <option value="income">Income</option>
                       <option value="expense">Expense</option>
-                    </Select>
-                    <FormMessage />
+                    </select>
+                    <FormMessage className="text-sm text-red-500" />
                   </FormItem>
                 )}
               />
@@ -175,10 +225,17 @@ export default function AddEditLedger({
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(parseInt(value))}
-                      defaultValue={field.value?.toString()}
+                    <FormLabel className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                      Category
+                    </FormLabel>
+                    <select
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value ? parseInt(e.target.value) : undefined
+                        )
+                      }
+                      className="bg-white bg-opacity-70 py-1 px-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     >
                       <option value="">Select a category</option>
                       {categories.map((category) => (
@@ -189,8 +246,8 @@ export default function AddEditLedger({
                           {category.name}
                         </option>
                       ))}
-                    </Select>
-                    <FormMessage />
+                    </select>
+                    <FormMessage className="text-sm text-red-500" />
                   </FormItem>
                 )}
               />

@@ -3,7 +3,6 @@ import {
   sqliteTable,
   text,
   integer,
-  blob,
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 
@@ -14,15 +13,9 @@ export const userTable = sqliteTable("users", {
   username: text("username").unique(),
 
   email: text("email").unique().notNull(),
-  isEmailVerified: integer("is_email_verified", { mode: "boolean" })
-    .notNull()
-    .default(false),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`current_timestamp`
-  ),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
-    sql`current_timestamp`
-  ),
+  isEmailVerified: integer("is_email_verified", { mode: "boolean" }).notNull(),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at").notNull(),
 });
 
 export const oauthAccount = sqliteTable("oauth_account", {
@@ -32,7 +25,7 @@ export const oauthAccount = sqliteTable("oauth_account", {
   userId: text("user_id").notNull(),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  expiresAt: integer("expires_at").notNull(),
 });
 
 export const sessionTable = sqliteTable("session", {
@@ -45,12 +38,8 @@ export const categories = sqliteTable("categories", {
   categoryId: integer("category_id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
   description: text("description"),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`current_timestamp`
-  ),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
-    sql`current_timestamp`
-  ),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at").notNull(),
 });
 
 export const ledgerEntries = sqliteTable("ledger_entries", {
@@ -58,16 +47,12 @@ export const ledgerEntries = sqliteTable("ledger_entries", {
   userId: text("user_id").notNull(),
   description: text("description").notNull(),
   amount: integer("amount").notNull(), // Using blob for DECIMAL
-  entryDate: integer("entry_date", { mode: "timestamp" }).notNull(),
+  entryDate: integer("entry_date").notNull(),
   entryType: text("entry_type", { enum: ["income", "expense"] }).notNull(),
   categoryId: integer("category_id").notNull(),
   imageUrl: text("image_url"),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at").notNull(),
 });
 
 export const images = sqliteTable("images", {
@@ -77,17 +62,13 @@ export const images = sqliteTable("images", {
   filePath: text("file_path").notNull(),
   fileSize: integer("file_size").notNull(),
   mimeType: text("mime_type").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
+  createdAt: integer("created_at"),
 });
 
 export const tags = sqliteTable("tags", {
   tagId: integer("tag_id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`current_timestamp`),
+  createdAt: integer("created_at"),
 });
 
 export const ledgerEntryTags = sqliteTable(

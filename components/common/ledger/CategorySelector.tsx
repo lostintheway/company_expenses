@@ -3,6 +3,7 @@
 
 import { categoriesSelect } from "@/db/schema";
 import { useRouter, usePathname } from "next/navigation";
+import EnhancedSelect from "../EnhancedSelect";
 
 export default function CategorySelector({
   currentCategoryId,
@@ -23,17 +24,10 @@ export default function CategorySelector({
   };
 
   return (
-    <select
+    <EnhancedSelect
       value={currentCategoryId}
       onChange={handleChange}
-      className="block w-auto mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-    >
-      <option value="">All Categories</option>
-      {categories.map((category) => (
-        <option key={category.categoryId} value={category.categoryId}>
-          {category.name}
-        </option>
-      ))}
-    </select>
+      categories={categories}
+    />
   );
 }

@@ -58,6 +58,7 @@ export const GET = async (req: NextRequest) => {
     const googleData = (await googleResponse.json()) as GoogleUser;
 
     const result = await db.transaction(async (tx) => {
+      const expDate = Date.now() + COOKIE_EXPIRATION;
       //count
 
       const user = await tx.query.userTable.findFirst({
@@ -70,6 +71,8 @@ export const GET = async (req: NextRequest) => {
         const [createdUser] = await tx
           .insert(userTable)
           .values({
+            updatedAt: Date.now(),
+            createdAt: Date.now(),
             id: googleData.id,
             googleId: googleData.id,
             email: googleData.email,
@@ -86,8 +89,7 @@ export const GET = async (req: NextRequest) => {
         await tx.insert(oauthAccount).values({
           provider: "google",
           userId: createdUser.id,
-          // userId: createdUser.id,
-          expiresAt: accessTokenExpiresAt,
+          expiresAt: expDate,
           providerUserId: googleData.id,
           accessToken: accessToken,
           refreshToken: refreshToken,
@@ -98,7 +100,7 @@ export const GET = async (req: NextRequest) => {
           .update(oauthAccount)
           .set({
             //add 10 days from today in Date format
-            expiresAt: new Date(Date.now() + COOKIE_EXPIRATION),
+            expiresAt: expDate,
             providerUserId: googleData.id,
             accessToken: accessToken,
             refreshToken: refreshToken,

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "68af1548-cb37-47c8-a502-0707936045ed",
+  "id": "a40fe11c-d34e-4449-bd8d-6be40ca360de",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -33,16 +33,14 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -107,9 +105,8 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -180,17 +177,15 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "notNull": false,
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -338,9 +333,8 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -399,24 +393,21 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": false
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "current_timestamp"
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {

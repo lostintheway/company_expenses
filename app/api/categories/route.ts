@@ -12,6 +12,8 @@ export async function POST(request: Request) {
       .values({
         name,
         description,
+        updatedAt: Date.now(),
+        createdAt: Date.now(),
       })
       .returning();
 

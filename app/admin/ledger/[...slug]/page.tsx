@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import CategorySelector from "@/components/common/ledger/CategorySelector";
 import DateRangeSelector from "@/components/common/ledger/DateRangeSelector";
-import LedgerEntriesList from "@/components/common/ledger/LedgerEntriesList";
+import LedgerTable from "@/components/common/ledger/LedgerTable";
 import { getCategories } from "@/app/actions/categoryActions";
 import SortSelector from "@/components/common/ledger/SortSelector";
 import { getLedgerEntries } from "@/app/actions/ledgerActions";
@@ -47,27 +47,30 @@ export default async function LedgerPage({
   return (
     <main className="bg-gray-300 min-h-screen p-4">
       <div className="container mb-3 mx-auto p-4 bg-white bg-opacity-60">
-        <h1 className="text-2xl font-bold mb-4">Ledger Entries</h1>
-        <div className="flex flex-wrap gap-4 mb-4 relative">
+        <div className="flex justify-between mb-4">
+          <h1 className="text-2xl font-bold">Ledger Entries</h1>
+          <AddEditLedger categories={categories} currentLedgerEntry={null} />
+        </div>
+        <div className="flex flex-wrap gap-4 mb-4 relative items-center justify-start">
           <Suspense fallback={<div>Loading...</div>}>
+            Categories:{" "}
+            <CategorySelector
+              currentCategoryId={categoryId}
+              categories={categories}
+            />
             <DateRangeSelector
-              initialEndDate={today.toISOString()}
-              initialStartDate={thirtyDaysAgo.toISOString()}
+              initialEndDate={today.toISOString().substring(0, 10)}
+              initialStartDate={thirtyDaysAgo.toISOString().substring(0, 10)}
             />
             <SortSelector
               currentSort={sort}
               showOldest={categoryId ? true : false}
             />
-            <CategorySelector
-              currentCategoryId={categoryId}
-              categories={categories}
-            />
-            <AddEditLedger categories={categories} currentLedgerEntry={null} />
           </Suspense>
         </div>
       </div>
       <Suspense fallback={<div>Loading entries...</div>}>
-        <LedgerEntriesList initialEntries={initialEntries} />
+        <LedgerTable initialEntries={initialEntries} />
       </Suspense>
     </main>
   );

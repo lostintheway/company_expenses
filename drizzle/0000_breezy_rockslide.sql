@@ -2,8 +2,8 @@ CREATE TABLE `categories` (
 	`category_id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`description` text,
-	`created_at` integer DEFAULT current_timestamp,
-	`updated_at` integer DEFAULT current_timestamp
+	`created_at` integer,
+	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `images` (
@@ -13,7 +13,7 @@ CREATE TABLE `images` (
 	`file_path` text NOT NULL,
 	`file_size` integer NOT NULL,
 	`mime_type` text NOT NULL,
-	`created_at` integer DEFAULT current_timestamp NOT NULL
+	`created_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `ledger_entries` (
@@ -25,8 +25,8 @@ CREATE TABLE `ledger_entries` (
 	`entry_type` text NOT NULL,
 	`category_id` integer NOT NULL,
 	`image_url` text,
-	`created_at` integer DEFAULT current_timestamp NOT NULL,
-	`updated_at` integer DEFAULT current_timestamp NOT NULL
+	`created_at` integer,
+	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `ledger_entry_tags` (
@@ -54,7 +54,7 @@ CREATE TABLE `session` (
 CREATE TABLE `tags` (
 	`tag_id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
-	`created_at` integer DEFAULT current_timestamp NOT NULL
+	`created_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `users` (
@@ -63,9 +63,9 @@ CREATE TABLE `users` (
 	`password_hash` text,
 	`username` text,
 	`email` text NOT NULL,
-	`is_email_verified` integer DEFAULT false NOT NULL,
-	`created_at` integer DEFAULT current_timestamp,
-	`updated_at` integer DEFAULT current_timestamp
+	`is_email_verified` integer NOT NULL,
+	`created_at` integer,
+	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `categories_name_unique` ON `categories` (`name`);--> statement-breakpoint

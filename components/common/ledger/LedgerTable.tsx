@@ -1,5 +1,6 @@
 // components/LedgerEntriesList.tsx
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,14 +10,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ledgerEntriesSelect } from "@/db/schema";
+import { Pencil, Trash2 } from "lucide-react";
 
-export default function LedgerEntriesList({
+export default function LedgerTable({
   initialEntries,
 }: {
   initialEntries: ledgerEntriesSelect[];
 }) {
   return (
-    <div className="border bg-white bg-opacity-60 p-4">
+    <div className="border bg-white bg-opacity-90 p-4">
       <Table>
         <TableHeader>
           <TableRow>
@@ -24,7 +26,8 @@ export default function LedgerEntriesList({
             <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead className="text-right ">Amount</TableHead>
+            <TableHead className="text-right ">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -36,15 +39,25 @@ export default function LedgerEntriesList({
                 {new Date(entry.entryDate).toLocaleDateString()}
               </TableCell>
               <TableCell className="capitalize">{entry.entryType}</TableCell>
-              <TableCell
-                className={
-                  entry.entryType === "income"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }
-              >
+              <TableCell className="text-right">
                 {entry.entryType === "income" ? "+" : "-"}{" "}
                 {entry.amount.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  // onClick={() => openEditModal(category)}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  // onClick={() => handleDeleteCategory(category.categoryId)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}

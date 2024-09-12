@@ -3,7 +3,13 @@ import React from "react";
 import Aside from "./Aside";
 import Navbar from "./Navbar";
 
-const Dashboard = ({ children }: { children: React.ReactNode }) => {
+const Dashboard = ({
+  pathname,
+  children,
+}: {
+  pathname: string;
+  children: React.ReactNode;
+}) => {
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-gray-100">
       {/* Navbar */}
@@ -12,7 +18,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
       {/* Main content area with sidebar */}
       <div className="flex overflow-hidden">
         {/* Sidebar */}
-        <Aside />
+        <Aside pathname={pathname} />
 
         {/* Main content */}
         <main
