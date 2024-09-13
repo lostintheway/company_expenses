@@ -34,9 +34,10 @@ export default function CategoriesClient({
   const [categories, setCategories] = useState(initialCategories);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async (values: FormValues) => {
     const isEditing = values.categoryId !== undefined;
+    setIsLoading(true);
     try {
       const url = isEditing
         ? `/api/categories/${values.categoryId}`
@@ -56,7 +57,7 @@ export default function CategoriesClient({
             return prevCategories.map((cat) =>
               cat.categoryId === updatedCategory.categoryId
                 ? updatedCategory
-                : cat,
+                : cat
             );
           } else {
             return [...prevCategories, updatedCategory];
@@ -65,15 +66,17 @@ export default function CategoriesClient({
         setAlertMessage(
           isEditing
             ? "Category updated successfully"
-            : "Category added successfully",
+            : "Category added successfully"
         );
         setIsDialogOpen(false);
         form.reset();
       }
     } catch (error) {
       setAlertMessage(
-        isEditing ? "Error updating category" : "Error adding category",
+        isEditing ? "Error updating category" : "Error adding category"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,7 +87,7 @@ export default function CategoriesClient({
       });
       if (response.ok) {
         setCategories((prevCategories) =>
-          prevCategories.filter((cat) => cat.categoryId !== categoryId),
+          prevCategories.filter((cat) => cat.categoryId !== categoryId)
         );
         setAlertMessage("Category deleted successfully");
       }
@@ -94,6 +97,7 @@ export default function CategoriesClient({
   };
 
   const openEditModal = (category: categoriesSelect) => {
+    setIsLoading(false);
     form.reset({
       categoryId: category.categoryId,
       name: category.name,
@@ -112,6 +116,7 @@ export default function CategoriesClient({
           <div className="mb-4">
             <AddEditCategory
               form={form}
+              isLoading={isLoading}
               onSubmit={onSubmit}
               isDialogOpen={isDialogOpen}
               setIsDialogOpen={setIsDialogOpen}

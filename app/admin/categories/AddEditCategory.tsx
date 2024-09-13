@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues } from "./CategoriesClient";
 
@@ -35,6 +35,7 @@ type Props = {
     undefined
   >;
   onSubmit: (values: FormValues) => Promise<void>;
+  isLoading: boolean;
 };
 
 export default function AddEditCategory({
@@ -42,6 +43,7 @@ export default function AddEditCategory({
   setIsDialogOpen,
   form,
   onSubmit,
+  isLoading,
 }: Props) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -102,7 +104,8 @@ export default function AddEditCategory({
                 </FormItem>
               )}
             />
-            <Button type="submit">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {form.getValues("categoryId") ? "Update" : "Add"}
             </Button>
           </form>
