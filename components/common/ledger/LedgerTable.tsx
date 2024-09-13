@@ -56,9 +56,9 @@ export default function LedgerTable({
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <DeleteAlertDialog
+                {/* <DeleteAlertDialog
                   onDelete={() => handleDeleteEntry(entry.entryId)}
-                />
+                /> */}
               </TableCell>
             </TableRow>
           ))}

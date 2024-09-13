@@ -1,46 +1,59 @@
-// app/api/categories/[id]/route.ts
+// app/api/ledgerEntries/[id]/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/db/index";
-import { categories } from "@/db/schema";
+import { ledgerEntries } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequest } from "@/lib/auth";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const id = parseInt(params.id);
+  const { user } = await validateRequest();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" });
+  }
   const body = await request.json();
-  const { name, description } = body;
+  const { amount, description, categoryId, entryDate, entryType } = body;
 
   try {
-    const updatedCategory = await db
-      .update(categories)
-      .set({ name, description })
-      .where(eq(categories.categoryId, id))
+    const updatedLedger = await db
+      .update(ledgerEntries)
+      .set({
+        amount,
+        categoryId,
+        description,
+        entryDate,
+        userId: user.id,
+        entryType,
+        updatedAt: Date.now(),
+      })
+      .where(eq(ledgerEntries.categoryId, id))
       .returning();
 
-    return NextResponse.json(updatedCategory[0]);
+    return NextResponse.json(updatedLedger[0]);
   } catch (error) {
     return NextResponse.json(
-      { error: "Error updating category" },
-      { status: 500 }
+      { error: "Error updating Entry" },
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const id = parseInt(params.id);
 
   try {
-    await db.delete(categories).where(eq(categories.categoryId, id));
-    return NextResponse.json({ message: "Category deleted successfully" });
+    await db.delete(ledgerEntries).where(eq(ledgerEntries.categoryId, id));
+    return NextResponse.json({ message: "Entry deleted successfully" });
   } catch (error) {
     return NextResponse.json(
-      { error: "Error deleting category" },
-      { status: 500 }
+      { error: "Error deleting Entry" },
+      { status: 500 },
     );
   }
 }

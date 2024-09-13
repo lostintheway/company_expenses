@@ -44,9 +44,9 @@ export function CategoriesTable({
               >
                 <Pencil className="h-4 w-4" />
               </Button>
-              <DeleteAlertDialog
+              {/* <DeleteAlertDialog
                 onDelete={() => handleDeleteCategory(category.categoryId)}
-              />
+              /> */}
             </TableCell>
           </TableRow>
         ))}
