@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,79 +22,43 @@ import {
 } from "@/components/ui/popover";
 import { categoriesSelect, ledgerEntriesSelect } from "@/db/schema";
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Plus } from "lucide-react";
-import { revalidatePath } from "next/cache";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { Calendar } from "@/components/ui/calendar";
+import { setBool } from "../../categories/AddEditCategory";
+
+type Props = {
+  categories: categoriesSelect[];
+  isAddDialogOpen: boolean;
+  setIsAddDialogOpen: setBool;
+  editingEntry: boolean;
+  // currentLedgerEntry: ledgerEntriesSelect | null;
+  form: UseFormReturn<FormValues, any, undefined>;
+  onSubmit: (values: FormValues) => Promise<void>;
+};
+
+export const formSchema = z.object({
+  entryId: z.number().optional(),
+  description: z.string().min(1, "Description is required"),
+  amount: z.number().min(0.01, "Amount must be greater than 0"),
+  entryDate: z.date(),
+  entryType: z.enum(["income", "expense"] as const),
+  categoryId: z.number().optional(),
+});
+
+export type FormValues = z.infer<typeof formSchema>;
 
 export default function AddEditLedger({
   categories,
-  currentLedgerEntry,
-}: {
-  categories: categoriesSelect[];
-  currentLedgerEntry: ledgerEntriesSelect | null;
-}) {
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<ledgerEntriesSelect | null>(
-    null
-  );
-  const [alertMessage, setAlertMessage] = useState("");
-
-  const formSchema = z.object({
-    ledgerId: z.number().optional(),
-    description: z.string().min(1, "Description is required"),
-    amount: z.number().min(0.01, "Amount must be greater than 0"),
-    entryDate: z.date(),
-    entryType: z.enum(["income", "expense"] as const),
-    categoryId: z.number().optional(),
-  });
-
-  type FormValues = z.infer<typeof formSchema>;
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      description: "",
-      amount: 0,
-      entryDate: new Date(),
-      entryType: "expense",
-      categoryId: undefined,
-    },
-  });
-
-  const onSubmit = async (values: FormValues) => {
-    const isEditing = values.ledgerId !== undefined;
-    try {
-      const url = isEditing ? `/api/ledger/${values.ledgerId}` : "/api/ledger";
-      const method = isEditing ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...values,
-          entryDate: values.entryDate,
-        }),
-      });
-
-      if (response.ok) {
-        revalidatePath("/admin/ledger/[...slug]", "page");
-        setAlertMessage(
-          isEditing ? "Entry updated successfully" : "Entry added successfully"
-        );
-        setIsAddDialogOpen(false);
-        form.reset();
-      }
-    } catch (error) {
-      setAlertMessage(
-        isEditing ? "Error updating entry" : "Error adding entry"
-      );
-    }
-  };
-
+  form,
+  isAddDialogOpen,
+  setIsAddDialogOpen,
+  onSubmit,
+  editingEntry,
+}: Props) {
   return (
     <div className="">
       <Dialog
@@ -106,7 +69,6 @@ export default function AddEditLedger({
           <Button
             className="ml-2"
             onClick={() => {
-              setEditingEntry(null);
               form.reset();
             }}
           >
@@ -166,7 +128,7 @@ export default function AddEditLedger({
                             variant={"outline"}
                             className={cn(
                               "bg-white bg-opacity-60 w-[240px] pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              !field.value && "text-muted-foreground",
                             )}
                           >
                             {field.value ? (
@@ -209,8 +171,8 @@ export default function AddEditLedger({
                     </FormLabel>
                     <select
                       {...field}
-                      className={`bg-white bg-opacity-70 py-1 px-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 
-                        focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 
+                      className={`bg-white bg-opacity-70 py-1 px-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300
+                        focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700
                         dark:border-gray-600 dark:text-white`}
                     >
                       <option value="income">Income</option>
@@ -232,7 +194,7 @@ export default function AddEditLedger({
                       {...field}
                       onChange={(e) =>
                         field.onChange(
-                          e.target.value ? parseInt(e.target.value) : undefined
+                          e.target.value ? parseInt(e.target.value) : undefined,
                         )
                       }
                       className="bg-white bg-opacity-70 py-1 px-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"

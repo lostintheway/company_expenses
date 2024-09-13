@@ -1,5 +1,3 @@
-// components/LedgerEntriesList.tsx
-"use client";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -10,13 +8,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ledgerEntriesSelect } from "@/db/schema";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
+import DeleteAlertDialog from "../DeleteAlertDialog";
+
+type Props = {
+  initialEntries: ledgerEntriesSelect[];
+  openEditModal: (category: ledgerEntriesSelect) => void;
+  handleDeleteEntry: (categoryId: number) => Promise<void>;
+};
 
 export default function LedgerTable({
   initialEntries,
-}: {
-  initialEntries: ledgerEntriesSelect[];
-}) {
+  openEditModal,
+  handleDeleteEntry,
+}: Props) {
   return (
     <div className="border bg-white bg-opacity-90 p-4">
       <Table>
@@ -26,14 +31,14 @@ export default function LedgerTable({
             <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead className="text-right ">Amount</TableHead>
-            <TableHead className="text-right ">Actions</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {initialEntries.map((entry) => (
             <TableRow key={entry.entryId}>
-              <TableCell className="">{entry.entryId}</TableCell>
+              <TableCell>{entry.entryId}</TableCell>
               <TableCell className="font-medium">{entry.description}</TableCell>
               <TableCell>
                 {new Date(entry.entryDate).toLocaleDateString()}
@@ -47,17 +52,13 @@ export default function LedgerTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  // onClick={() => openEditModal(category)}
+                  onClick={() => openEditModal(entry)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  // onClick={() => handleDeleteCategory(category.categoryId)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <DeleteAlertDialog
+                  onDelete={() => handleDeleteEntry(entry.entryId)}
+                />
               </TableCell>
             </TableRow>
           ))}

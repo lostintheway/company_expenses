@@ -11,7 +11,10 @@ const Dashboard = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="h-screen flex flex-col bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-gray-100">
+    <div
+      className={`h-screen flex flex-col bg-gray-100 dark:bg-zinc-900 text-gray-900
+      dark:text-gray-100`}
+    >
       {/* Navbar */}
       <Navbar />
 
@@ -22,7 +25,8 @@ const Dashboard = ({
 
         {/* Main content */}
         <main
-          className={`flex-1 overflow-auto transition-all duration-300 ease-in-out bg-gray-200 dark:bg-zinc-900`}
+          className={`flex-1 p-0 md:p-4 overflow-auto transition-all
+            duration-300 ease-in-out bg-gray-300 dark:bg-zinc-900`}
         >
           {children}
         </main>
