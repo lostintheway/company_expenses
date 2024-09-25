@@ -1,7 +1,6 @@
 "use client";
 // components/common/expenses/CategorySelector.tsx
 
-import { categoriesSelect } from "@/db/schema";
 import { useRouter, usePathname } from "next/navigation";
 import EnhancedSelect from "../EnhancedSelect";
 
@@ -10,7 +9,7 @@ export default function CategorySelector({
   categories,
 }: {
   currentCategoryId: string;
-  categories: categoriesSelect[];
+  categories: any[];
 }) {
   const router = useRouter();
   const pathname = usePathname();
